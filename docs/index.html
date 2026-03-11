@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>AI Diffusion Models — Diffusion Under Governance</title>
+  <meta name="description" content="AI Diffusion Models: governance-first laboratories for understanding diffusion processes, denoising dynamics, probabilistic generation, iterative reconstruction, and auditable educational workflows. One book and governed Colab notebooks implementing diffusion models as reviewable computational systems." />
+
+  <style>
+    :root{
+      --bg:#07080d;
+      --panel:#0f1220;
+      --panel2:#141836;
+      --text:#eef0ff;
+      --muted:#b8bddb;
+      --border:rgba(255,255,255,0.09);
+      --accent:#7aa2ff;
+      --accent2:#6ee7c8;
+      --warn:#ffd27a;
+      --shadow:0 18px 60px rgba(0,0,0,0.45);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(122,162,255,0.14), transparent 60%),
+        radial-gradient(800px 600px at 80% 90%, rgba(110,231,200,0.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      line-height:1.75;
+    }
+    a{color:var(--accent);text-decoration:none;}
+    a:hover{color:var(--accent2);text-decoration:underline;}
+    .container{max-width:1180px;margin:0 auto;padding:48px 22px 96px;}
+
+    h1{font-size:40px;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.02em;}
+    h2{font-size:30px;margin:64px 0 14px;}
+    h3{font-size:19px;margin:0 0 10px;}
+    p{color:var(--muted);max-width:110ch;}
+
+    .hero{
+      padding:44px;
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(20,24,54,0.95), rgba(15,18,32,0.9));
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+
+    .callout{
+      margin-top:26px;
+      padding:22px;
+      border-radius:20px;
+      background:linear-gradient(135deg, rgba(122,162,255,0.08), rgba(110,231,200,0.06));
+      border:1px solid rgba(122,162,255,0.22);
+      color:var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:20px;
+      margin-top:28px;
+    }
+
+    .card{
+      padding:22px;
+      border-radius:20px;
+      background:var(--panel2);
+      border:1px solid var(--border);
+      box-shadow:0 12px 34px rgba(0,0,0,0.32);
+      display:flex;
+      flex-direction:column;
+      min-height:250px;
+    }
+
+    .card p{margin:0;}
+    .card p + p{margin-top:10px;}
+
+    .card a{
+      display:inline-block;
+      margin-top:auto;
+      padding-top:14px;
+      font-weight:800;
+      letter-spacing:0.03em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    .reviewbox{
+      margin-top:28px;
+      padding:28px;
+      border-radius:22px;
+      border:1px solid rgba(255,210,122,0.35);
+      background:linear-gradient(135deg, rgba(255,210,122,0.07), rgba(122,162,255,0.06));
+    }
+
+    .stars{
+      color:var(--warn);
+      font-size:20px;
+      font-weight:900;
+      letter-spacing:0.12em;
+      margin-bottom:14px;
+    }
+
+    footer{
+      margin-top:96px;
+      padding-top:32px;
+      border-top:1px solid var(--border);
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .pill{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(122,162,255,0.22);
+      background:rgba(122,162,255,0.08);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      margin-top:10px;
+    }
+
+    .quicklinks{
+      margin-top:20px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid rgba(122,162,255,0.25);
+      background:rgba(122,162,255,0.08);
+      color:var(--text);
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:0.05em;
+      text-transform:uppercase;
+    }
+
+    .btn:hover{
+      border-color:rgba(110,231,200,0.35);
+      background:rgba(110,231,200,0.10);
+      text-decoration:none;
+      color:var(--text);
+    }
+
+    .mutednote{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:10px;
+      max-width:110ch;
+    }
+
+    code.inline{
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      padding:2px 7px;
+      border-radius:10px;
+      color:var(--text);
+      font-size:0.95em;
+    }
+  </style>
+</head>
+
+<body>
+<main class="container">
+
+<section class="hero">
+  <h1>AI Diffusion Models</h1>
+  <div class="pill">Diffusion Under Governance · Auditable Generative Systems</div>
+
+  <p>
+    <strong>AI Diffusion Models</strong> is a governance-first laboratory for studying
+    <strong>diffusion-based generative systems</strong> as reviewable computational mechanisms—
+    not as black-box magic. In professional and educational settings, fascination with model outputs
+    is not enough. What matters is whether the underlying process can be explained, reproduced,
+    inspected, and criticized under explicit control.
+  </p>
+
+  <p>
+    This repository treats diffusion modeling as an engineering and interpretive discipline.
+    A diffusion model is not a decorative generator. It is an iterative probabilistic process:
+    explicit noise injection, explicit denoising logic, explicit approximation, explicit assumptions,
+    explicit implementation choices, explicit limits. The purpose is not to celebrate fluent generation.
+    The purpose is to build <strong>reviewable diffusion workflows</strong> that a human can study,
+    replicate, challenge, and refine without relying on model mystique.
+  </p>
+
+  <p>
+    Each notebook implements one governed chapter laboratory—introducing diffusion intuition,
+    formalizing the forward and reverse processes, and translating those mechanisms into executable code.
+    Outputs should be treated as <strong>Not verified</strong> unless independently validated by qualified humans.
+    That is not legal wallpaper. It is the operating posture of the entire project.
+  </p>
+
+  <div class="callout">
+    <strong>Core premise:</strong> Better generative modeling is not more impressive generation.<br/>
+    <span class="mutednote">
+      Better generative modeling means clearer mechanisms, stricter interpretability,
+      cleaner assumptions, stronger reproducibility, and safer human understanding of what the system is actually doing.
+    </span>
+  </div>
+
+  <div class="quicklinks" aria-label="Quick Links">
+    <a class="btn" href="https://github.com/alexdibol/ai-diffusion/blob/main/book/BOOK%20AI%20DIFFUSION.pdf" target="_blank" rel="noopener">Read Book (PDF)</a>
+    <a class="btn" href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_1.ipynb" target="_blank" rel="noopener">Open Chapter 1 Notebook</a>
+    <a class="btn" href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_2.ipynb" target="_blank" rel="noopener">Open Chapter 2 Notebook</a>
+    <a class="btn" href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_3.ipynb" target="_blank" rel="noopener">Open Chapter 3 Notebook</a>
+  </div>
+
+  <p class="mutednote">
+    Repository path convention derived from the current file tree:
+    <code class="inline">/book/BOOK%20AI%20DIFFUSION.pdf</code> and
+    <code class="inline">/notebooks/CHAPTER_1.ipynb</code> through
+    <code class="inline">CHAPTER_3.ipynb</code>.
+  </p>
+</section>
+
+<section>
+  <h2>The Book</h2>
+
+  <p>
+    The book is the governing specification for the repository. It defines the conceptual logic of diffusion models,
+    the probabilistic foundations of noising and denoising, the meaning of iterative reconstruction,
+    and the limits that remain even when outputs appear elegant or convincing. The notebooks are operational laboratories:
+    they instantiate the chapter ideas, execute them under explicit conditions, and make the mechanics visible.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>BOOK AI DIFFUSION (PDF)</h3>
+      <p>
+        Covers the conceptual foundations of diffusion models, the forward corruption process,
+        reverse denoising dynamics, iterative sampling logic, probabilistic interpretation,
+        implementation boundaries, and governance-first reading of generative systems.
+      </p>
+      <p>
+        The emphasis is educational and institutional: diffusion is treated as a reviewable mechanism,
+        not a theatrical black box.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/book/BOOK%20AI%20DIFFUSION.pdf" target="_blank" rel="noopener">
+        Read Book (PDF)
+      </a>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Operating rule:</strong> Notebook results are governed experimental outputs.
+    They are <strong>Not verified</strong> unless reviewed, replicated, and approved by a qualified human.
+  </div>
+</section>
+
+<section>
+  <h2>Governed Notebooks (Diffusion Mechanisms as Reviewable Systems)</h2>
+
+  <p>
+    These notebooks do not aim to show only “what the model can generate.” They show what a diffusion process
+    is doing under the hood: how structure is corrupted, how recovery is approximated, and where mathematical elegance
+    still meets practical limitation. Each notebook operationalizes a chapter, introduces its control objective,
+    and clarifies what the reader should and should not infer from the run.
+  </p>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Chapter 1 — Why Diffusion Models Matter</h3>
+      <p>
+        Establishes the central claim of the repository: diffusion models should be understood as governed,
+        iterative probabilistic systems rather than mysterious generators. The notebook introduces intuition,
+        staged corruption, staged recovery, and the conceptual reasons diffusion became important in modern AI.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_1.ipynb" target="_blank" rel="noopener">Open Notebook</a>
+    </div>
+
+    <div class="card">
+      <h3>Chapter 2 — Forward Diffusion and Reverse Denoising</h3>
+      <p>
+        Formalizes the core mechanism of the model family. The notebook focuses on how noise is gradually added,
+        how information is progressively degraded, and how the reverse process attempts to reconstruct signal
+        through learned denoising dynamics under explicit assumptions.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_2.ipynb" target="_blank" rel="noopener">Open Notebook</a>
+    </div>
+
+    <div class="card">
+      <h3>Chapter 3 — Implementation, Interpretation, and Limits</h3>
+      <p>
+        Translates the diffusion framework into executable practice. The notebook examines generation logic,
+        implementation choices, observable behavior, and the limits of interpretation. The emphasis is not on hype,
+        but on understanding what the code is actually demonstrating and what remains unproven.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_3.ipynb" target="_blank" rel="noopener">Open Notebook</a>
+    </div>
+
+  </div>
+
+  <div class="callout">
+    <strong>Notebook invariant:</strong> explicit mechanisms · inspectable assumptions · iterative process visibility ·
+    deterministic setup where applicable · pedagogical traceability · mandatory interpretation discipline ·
+    <strong>verification_status="Not verified"</strong> unless independently confirmed.
+  </div>
+</section>
+
+<section>
+  <h2>What the Repository Teaches</h2>
+
+  <p>
+    The project is designed to move readers beyond surface-level descriptions of diffusion models.
+    The goal is not just to say that these systems “add noise and remove noise.” The goal is to make that statement
+    operationally meaningful by connecting intuition, mathematics, and implementation into one coherent educational sequence.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Mechanism Before Mystique</h3>
+      <p>
+        The repository favors step-by-step explanation over generative spectacle.
+        Readers should be able to describe what the process is doing, not merely admire what it outputs.
+      </p>
+      <p class="mutednote">
+        A diffusion model that cannot be explained clearly is not yet understood clearly.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Iteration as a Modeling Principle</h3>
+      <p>
+        Diffusion systems do not produce results in one leap. Their staged character matters:
+        it changes how we think about uncertainty, approximation, convergence, reconstruction, and error.
+      </p>
+      <p class="mutednote">
+        Iteration is part of the conceptual lesson, not just part of the code.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Probabilistic Structure</h3>
+      <p>
+        Diffusion models are probabilistic, but not arbitrary. Their behavior is shaped by schedules,
+        assumptions, loss objectives, and denoising approximations that must remain visible to the reader.
+      </p>
+      <p class="mutednote">
+        Randomness without structure is noise; diffusion is structured noise with a governed objective.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Human Interpretation</h3>
+      <p>
+        However strong the model appears, humans remain responsible for interpretation, validation,
+        and deciding what the outputs do and do not justify.
+      </p>
+      <p class="mutednote">
+        The model can generate candidates; it does not inherit professional accountability.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Shared Governance Spine</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Generation Is Not Verification</h3>
+      <p>
+        A coherent output is not automatically a verified output. Fluency, plausibility,
+        and structural elegance do not substitute for independent validation.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/book/BOOK%20AI%20DIFFUSION.pdf" target="_blank" rel="noopener">See Book</a>
+    </div>
+
+    <div class="card">
+      <h3>Mathematical Elegance Is Not Operational Sufficiency</h3>
+      <p>
+        A model can be theoretically appealing and still remain brittle, limited, or easy to misinterpret.
+        The repository keeps those limits visible rather than hiding them behind polished outputs.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_2.ipynb" target="_blank" rel="noopener">See Core Mechanics</a>
+    </div>
+
+    <div class="card">
+      <h3>Humans Remain Accountable</h3>
+      <p>
+        The notebooks provide governed demonstrations and educational artifacts.
+        They do not replace expert review, domain judgment, or institutional controls.
+      </p>
+      <a href="https://github.com/alexdibol/ai-diffusion/blob/main/notebooks/CHAPTER_3.ipynb" target="_blank" rel="noopener">See Implementation Limits</a>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Professional posture:</strong> Human practitioners retain responsibility at every stage.
+    This repository provides governed mechanisms and educational artifacts—not autonomous authority.
+  </div>
+</section>
+
+<section>
+  <h2>Who This Repository Is For</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>MBA / Master of Finance Cohorts</h3>
+      <p>
+        For students who need to understand modern generative AI through mechanism, not hype:
+        explicit process, probabilistic structure, executable notebooks, and disciplined interpretation.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Finance and Corporate Practitioners</h3>
+      <p>
+        For professionals who want conceptual clarity about diffusion systems before discussing
+        broader applications, risks, limits, or strategic implications in institutional contexts.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Researchers and Builders</h3>
+      <p>
+        For readers developing a deeper technical understanding of diffusion processes and seeking
+        a clean bridge between theory, implementation, and governance-aware interpretation.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Licensing, Governance & AI Use Disclosure</h2>
+
+  <div class="callout">
+    <p>
+      <strong>Educational / Non-Reliance:</strong> All materials are provided for educational
+      and research purposes only. Nothing in this repository constitutes investment, trading,
+      legal, tax, accounting, audit, or compliance advice.
+    </p>
+
+    <p>
+      <strong>Not verified:</strong> Unless explicitly stated otherwise in a specific artifact,
+      treat all outputs, claims, calculations, summaries, classifications, demonstrations,
+      and conclusions as <strong>Not verified</strong>.
+    </p>
+
+    <p>
+      <strong>Confidentiality and data hygiene:</strong> Do not paste confidential, proprietary,
+      regulated, or personally identifying information into external systems. Use redaction,
+      anonymization, and minimum-necessary input discipline by default.
+    </p>
+
+    <p>
+      <strong>No fabricated sources or claims:</strong> Zero tolerance for invented citations,
+      unsupported numbers, fabricated policies, fictional terms, or ungrounded conclusions.
+      When evidence is missing, the correct output is an explicit uncertainty statement.
+    </p>
+
+    <p>
+      <strong>License:</strong> This project is released under the MIT License.
+      Preserve copyright and license notices.
+    </p>
+
+    <p>
+      <strong>Copyright (c) 2026 Alejandro Reynoso</strong>
+    </p>
+  </div>
+</section>
+
+<footer>
+  AI Diffusion Models · Diffusion Under Governance · Governance-First · Auditable · Reproducible · Human-Accountable
+</footer>
+
+</main>
+</body>
+</html>
